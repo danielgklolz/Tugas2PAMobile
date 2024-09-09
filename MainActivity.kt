@@ -1,61 +1,57 @@
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var num1: EditText
-    private lateinit var num2: EditText
-    private lateinit var operation: RadioGroup
-    private lateinit var calculate: Button
-    private lateinit var result: TextView
+    private lateinit var inputColumn1: EditText
+    private lateinit var inputColumn2: EditText
+    private lateinit var radioPlus: RadioButton
+    private lateinit var radioMinus: RadioButton
+    private lateinit var radioMultiply: RadioButton
+    private lateinit var radioDivide: RadioButton
+    private lateinit var calcButton: Button
+    private lateinit var clearButton: Button
+    private lateinit var teksHasil: TextView
+    private lateinit var outHasil: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        num1 = findViewById(R.id.num1)
-        num2 = findViewById(R.id.num2)
-        operation = findViewById(R.id.operation)
-        calculate = findViewById(R.id.calculate)
-        result = findViewById(R.id.result)
+        inputColumn1 = findViewById(R.id.inputColumn1)
+        inputColumn2 = findViewById(R.id.inputColumn2)
+        radioPlus = findViewById(R.id.radioPlus)
+        radioMinus = findViewById(R.id.radioMinus)
+        radioMultiply = findViewById(R.id.radioMultiply)
+        radioDivide = findViewById(R.id.radioDivide)
+        calcButton = findViewById(R.id.calcButton)
+        clearButton = findViewById(R.id.clearButton)
+        teksHasil = findViewById(R.id.teksHasil)
+        outHasil = findViewById(R.id.outHasil)
 
-        calculate.setOnClickListener {
-            calculateResult()
-        }
-    }
+        calcButton.setOnClickListener {
+            val num1 = inputColumn1.text.toString().toDouble()
+            val num2 = inputColumn2.text.toString().toDouble()
+            var result = 0.0
 
-    private fun calculateResult() {
-        val num1Value = num1.text.toString().toDoubleOrNull()
-        val num2Value = num2.text.toString().toDoubleOrNull()
-
-        if (num1Value == null || num2Value == null) {
-            Toast.makeText(this, "Please enter valid numbers", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val selectedOperation = operation.checkedRadioButtonId
-        var resultValue: Double? = null
-
-        when (selectedOperation) {
-            R.id.add -> resultValue = num1Value + num2Value
-            R.id.subtract -> resultValue = num1Value - num2Value
-            R.id.multiply -> resultValue = num1Value * num2Value
-            R.id.divide -> {
-                if (num2Value != 0.0) {
-                    resultValue = num1Value / num2Value
-                } else {
-                    Toast.makeText(this, "Cannot divide by zero", Toast.LENGTH_SHORT).show()
-                    return
-                }
+            when {
+                radioPlus.isChecked -> result = num1 + num2
+                radioMinus.isChecked -> result = num1 - num2
+                radioMultiply.isChecked -> result = num1 * num2
+                radioDivide.isChecked -> result = num1 / num2
             }
+
+            outHasil.text = result.toString()
         }
 
-        result.text = "Result: $resultValue"
+        clearButton.setOnClickListener {
+            inputColumn1.text.clear()
+            inputColumn2.text.clear()
+            outHasil.text = "0"
+        }
     }
 }
